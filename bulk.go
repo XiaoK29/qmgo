@@ -113,7 +113,7 @@ func (b *Bulk) RemoveAll(filter interface{}) *Bulk {
 // Upsert queues an Upsert operation for bulk execution.
 // The replacement should be document without operator
 func (b *Bulk) Upsert(filter interface{}, replacement interface{}) *Bulk {
-	wm := mongo.NewReplaceOneModel().SetFilter(filter).SetReplacement(replacement).SetUpsert(true)
+	wm := mongo.NewUpdateOneModel().SetFilter(filter).SetUpdate(replacement).SetUpsert(true)
 	b.queue = append(b.queue, wm)
 	return b
 }
