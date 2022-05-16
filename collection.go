@@ -215,14 +215,15 @@ func (c *Collection) UpdateOne(ctx context.Context, filter interface{}, update i
 	}
 
 	res, err := c.collection.UpdateOne(ctx, filter, update, updateOpts)
-	if res != nil && res.MatchedCount == 0 {
-		err = ErrNoSuchDocuments
+	if res != nil {
+		// 5.16修改，返回result
+		result = translateUpdateResult(res)
 	}
+
 	if err != nil {
 		return nil, err
 	}
-	// 5.16修改，返回result
-	result = translateUpdateResult(res)
+
 	if len(opts) > 0 && opts[0].UpdateHook != nil {
 		if err = middleware.Do(ctx, opts[0].UpdateHook, operator.AfterUpdate); err != nil {
 			return
