@@ -200,7 +200,7 @@ func (c *Collection) UpsertId(ctx context.Context, id interface{}, replacement i
 
 // UpdateOne executes an update command to update at most one document in the collection.
 // Reference: https://docs.mongodb.com/manual/reference/operator/update/
-func (c *Collection) UpdateOne(ctx context.Context, filter interface{}, update interface{}, opts ...opts.UpdateOptions) (err error) {
+func (c *Collection) UpdateOne(ctx context.Context, filter interface{}, update interface{}, opts ...opts.UpdateOptions) (result *UpdateResult, err error) {
 	updateOpts := options.Update()
 
 	if len(opts) > 0 {
@@ -219,14 +219,16 @@ func (c *Collection) UpdateOne(ctx context.Context, filter interface{}, update i
 		err = ErrNoSuchDocuments
 	}
 	if err != nil {
-		return err
+		return nil, err
 	}
+	// 5.16修改，返回result
+	result = translateUpdateResult(res)
 	if len(opts) > 0 && opts[0].UpdateHook != nil {
 		if err = middleware.Do(ctx, opts[0].UpdateHook, operator.AfterUpdate); err != nil {
 			return
 		}
 	}
-	return err
+	return
 }
 
 // UpdateId executes an update command to update at most one document in the collection.
