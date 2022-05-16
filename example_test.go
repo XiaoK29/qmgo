@@ -123,7 +123,7 @@ func TestQmgo(t *testing.T) {
 		ast.Error(errors.New("error"), "impossible")
 	}
 	// Update one
-	err = cli.UpdateOne(ctx, bson.M{"name": "d4"}, bson.M{"$set": bson.M{"age": 17}})
+	_,err = cli.UpdateOne(ctx, bson.M{"name": "d4"}, bson.M{"$set": bson.M{"age": 17}})
 	ast.NoError(err)
 	cli.Find(ctx, bson.M{"age": 17}).One(&one)
 	ast.Equal("d4", one.Name)

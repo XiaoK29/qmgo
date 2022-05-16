@@ -110,7 +110,7 @@ func TestFieldUpdate(t *testing.T) {
 	_, err := cli.InsertOne(context.Background(), ui)
 	ast.NoError(err)
 
-	err = cli.UpdateOne(context.Background(), bson.M{"name": "Lucas"}, bson.M{"$set": bson.M{"updateTimeAt": 0, "updateAt": time.Time{}}})
+	_,err = cli.UpdateOne(context.Background(), bson.M{"name": "Lucas"}, bson.M{"$set": bson.M{"updateTimeAt": 0, "updateAt": time.Time{}}})
 	ast.NoError(err)
 
 	findUi := UserField{}

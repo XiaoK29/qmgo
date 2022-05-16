@@ -170,7 +170,7 @@ func TestUpdateHook(t *testing.T) {
 	res, err := cli.InsertOne(context.Background(), u)
 	ast.NoError(err)
 
-	err = cli.UpdateOne(ctx, bson.M{"name": "Lucas"}, bson.M{operator.Set: bson.M{"age": 27}}, options.UpdateOptions{
+	_,err = cli.UpdateOne(ctx, bson.M{"name": "Lucas"}, bson.M{operator.Set: bson.M{"age": 27}}, options.UpdateOptions{
 		UpdateHook: uh,
 	})
 	ast.NoError(err)
@@ -422,14 +422,14 @@ func TestHookErr(t *testing.T) {
 	ast.Equal(1, myHook1.afterICount)
 	ast.Equal(0, myHook2.afterICount)
 
-	err = cli.UpdateOne(ctx, bson.M{"name": "Lucas"}, bson.M{operator.Set: bson.M{"age": 27}}, options.UpdateOptions{
+	_,err = cli.UpdateOne(ctx, bson.M{"name": "Lucas"}, bson.M{operator.Set: bson.M{"age": 27}}, options.UpdateOptions{
 		UpdateHook: myHook,
 	})
 	ast.Error(err)
 	ast.Equal(1, myHook.beforeUCount)
 	ast.Equal(0, myHook.afterUCount)
 
-	err = cli.UpdateOne(ctx, bson.M{"name": "Lucas"}, bson.M{operator.Set: bson.M{"age": 27}}, options.UpdateOptions{
+	_,err = cli.UpdateOne(ctx, bson.M{"name": "Lucas"}, bson.M{operator.Set: bson.M{"age": 27}}, options.UpdateOptions{
 		UpdateHook: myHook,
 	})
 	ast.Error(err)
